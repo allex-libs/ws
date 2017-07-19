@@ -1,0 +1,36 @@
+{
+  "name": "allex_wslib",
+  "version": "1.0.0",
+  "description": "AllexJS implementation of the websockets/ws lib concept",
+  "main": "index.js",
+  "scripts": {
+    "test": "make test"
+  },
+  "dependencies": {
+    "ultron": "1.0.x"
+  },
+  "devDependencies": {
+    "allexlib": "1.x",
+    "ansi": "0.3.x",
+    "benchmark": "0.3.x",
+    "bufferutil": "3.x",
+    "expect.js": "0.3.x",
+    "istanbul": "^0.4.1",
+    "mocha": "2.3.x",
+    "should": "8.0.x",
+    "tinycolor": "0.0.x",
+    "utf-8-validate": "3.x"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/allex-libs/ws.git"
+  },
+  "keywords": [
+    "ecosystem:AllexJS",
+    "WebSocket",
+    "implementation",
+    "lib"
+  ],
+  "author": "Andrija Petrovic <andrija.hers@gmail.com>",
+  "license": "ISC"
+}
