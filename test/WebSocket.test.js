@@ -142,7 +142,8 @@ describe('WebSocket', function() {
           });
         }
         catch(e) {
-          e.should.match(/localAddress must be a valid IP/);
+          e.code.should.eql('ERR_INVALID_IP_ADDRESS');
+          e.message.should.match(/Invalid IP address/);
           done();
         }
       });
