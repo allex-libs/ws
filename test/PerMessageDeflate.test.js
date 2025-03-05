@@ -212,11 +212,11 @@ describe('PerMessageDeflate', function() {
     it('should compress/decompress data', function(done) {
       var perMessageDeflate = new PerMessageDeflate();
       perMessageDeflate.accept([{}]);
-      perMessageDeflate.compress(new Buffer([1, 2, 3]), true, function(err, compressed) {
+      perMessageDeflate.compress(Buffer.from([1, 2, 3]), true, function(err, compressed) {
         if (err) return done(err);
         perMessageDeflate.decompress(compressed, true, function(err, data) {
           if (err) return done(err);
-          data.should.eql(new Buffer([1, 2, 3]));
+          data.should.eql(Buffer.from([1, 2, 3]));
           done();
         });
       });
@@ -227,7 +227,7 @@ describe('PerMessageDeflate', function() {
       var perMessageDeflate = new PerMessageDeflate();
       perMessageDeflate.accept([{}]);
 
-      var buf = new Buffer([1, 2, 3, 4]);
+      var buf = Buffer.from([1, 2, 3, 4]);
       perMessageDeflate.compress(buf.slice(0, 2), false, function(err, compressed1) {
         if (err) return done(err);
         perMessageDeflate.compress(buf.slice(2), true, function(err, compressed2) {
@@ -236,7 +236,7 @@ describe('PerMessageDeflate', function() {
             if (err) return done(err);
             perMessageDeflate.decompress(compressed2, true, function(err, data2) {
               if (err) return done(err);
-              new Buffer.concat([data1, data2]).should.eql(new Buffer([1, 2, 3, 4]));
+              new Buffer.concat([data1, data2]).should.eql(Buffer.from([1, 2, 3, 4]));
               done();
             });
           });
@@ -248,11 +248,11 @@ describe('PerMessageDeflate', function() {
       var perMessageDeflate = new PerMessageDeflate({ memLevel: 5 });
       var extensions = Extensions.parse('permessage-deflate; server_no_context_takeover; client_no_context_takeover; server_max_window_bits=10; client_max_window_bits=11');
       perMessageDeflate.accept(extensions['permessage-deflate']);
-      perMessageDeflate.compress(new Buffer([1, 2, 3]), true, function(err, compressed) {
+      perMessageDeflate.compress(Buffer.from([1, 2, 3]), true, function(err, compressed) {
         if (err) return done(err);
         perMessageDeflate.decompress(compressed, true, function(err, data) {
           if (err) return done(err);
-          data.should.eql(new Buffer([1, 2, 3]));
+          data.should.eql(Buffer.from([1, 2, 3]));
           done();
         });
       });
@@ -262,7 +262,7 @@ describe('PerMessageDeflate', function() {
       var perMessageDeflate = new PerMessageDeflate();
       var extensions = Extensions.parse('permessage-deflate; server_no_context_takeover; client_no_context_takeover');
       perMessageDeflate.accept(extensions['permessage-deflate']);
-      var buf = new Buffer('foofoo');
+      var buf = Buffer.from('foofoo');
       perMessageDeflate.compress(buf, true, function(err, compressed1) {
         if (err) return done(err);
         perMessageDeflate.decompress(compressed1, true, function(err, data) {

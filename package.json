@@ -1,6 +1,6 @@
 {
   "name": "allex_wslib",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "AllexJS implementation of the websockets/ws lib concept",
   "main": "index.js",
   "scripts": {
@@ -10,7 +10,7 @@
     "ultron": "1.x"
   },
   "devDependencies": {
-    "allexlib": "1.x",
+    "allexlib": "3.x",
     "ansi": "0.3.x",
     "benchmark": "0.3.x",
     "bufferutil": "4.x",

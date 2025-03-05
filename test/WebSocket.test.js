@@ -247,7 +247,7 @@ describe('WebSocket', function() {
         var ws = new WebSocket('ws://' + auth + '@localhost:' + port);
         srv.on('upgrade', function (req, socket, head) {
           assert(req.headers.authorization, 'auth header exists');
-          assert.equal(req.headers.authorization, 'Basic ' + new Buffer(auth).toString('base64'));
+          assert.equal(req.headers.authorization, 'Basic ' + Buffer.from(auth).toString('base64'));
           ws.terminate();
           ws.on('close', function () {
             srv.close();
@@ -785,7 +785,7 @@ describe('WebSocket', function() {
     it('binary data can be sent and received as buffer', function(done) {
       server.createServer(++port, function(srv) {
         var ws = new WebSocket('ws://localhost:' + port);
-        var buf = new Buffer('foobar');
+        var buf = Buffer.from('foobar');
         ws.on('open', function() {
           ws.send(buf, {binary: true});
         });
@@ -820,7 +820,7 @@ describe('WebSocket', function() {
     it('Buffer is auto-detected without binary flag', function(done) {
       server.createServer(++port, function(srv) {
         var ws = new WebSocket('ws://localhost:' + port);
-        var buf = new Buffer('foobar');
+        var buf = Buffer.from('foobar');
         ws.on('open', function() {
           ws.send(buf);
         });
@@ -1169,7 +1169,7 @@ describe('WebSocket', function() {
     it('very long binary data can be streamed', function(done) {
       server.createServer(++port, function(srv) {
         var ws = new WebSocket('ws://localhost:' + port);
-        var buffer = new Buffer(10 * 1024);
+        var buffer = Buffer.allocUnsafe(10 * 1024);
         for (var i = 0; i < buffer.length; ++i) buffer[i] = i % 0xff;
         ws.on('open', function() {
           var i = 0;

@@ -4,7 +4,7 @@
 
 getBufferFromHexString = function(byteStr) {
   var bytes = byteStr.split(' ');
-  var buf = new Buffer(bytes.length);
+  var buf = Buffer.alloc(bytes.length);
   for (var i = 0; i < bytes.length; ++i) {
     buf[i] = parseInt(bytes[i], 16);
   }
@@ -28,9 +28,9 @@ getHexStringFromBuffer = function(data) {
  */
 
 splitBuffer = function(buffer) {
-  var b1 = new Buffer(Math.ceil(buffer.length / 2));
+  var b1 = Buffer.alloc(Math.ceil(buffer.length / 2));
   buffer.copy(b1, 0, 0, b1.length);
-  var b2 = new Buffer(Math.floor(buffer.length / 2));
+  var b2 = Buffer.alloc(Math.floor(buffer.length / 2));
   buffer.copy(b2, 0, b1.length, b1.length + b2.length);
   return [b1, b2];
 }
@@ -40,7 +40,7 @@ splitBuffer = function(buffer) {
  */
 
 mask = function(buf, maskString) {
-  if (typeof buf == 'string') buf = new Buffer(buf);
+  if (typeof buf == 'string') buf = Buffer.from(buf);
   var mask = getBufferFromHexString(maskString || '34 83 a8 68');
   for (var i = 0; i < buf.length; ++i) {
     buf[i] ^= mask[i % 4];    
@@ -54,16 +54,16 @@ mask = function(buf, maskString) {
  
 getHybiLengthAsHexString = function(len, masked) {  
   if (len < 126) {
-    var buf = new Buffer(1);
+    var buf = Buffer.allocUnsafe(1);
     buf[0] = (masked ? 0x80 : 0) | len;
   }
   else if (len < 65536) {
-    var buf = new Buffer(3);
+    var buf = Buffer.alloc(3);
     buf[0] = (masked ? 0x80 : 0) | 126;
     getBufferFromHexString(pack(4, len)).copy(buf, 1);
   }
   else {
-    var buf = new Buffer(9);
+    var buf = Buffer.alloc(9);
     buf[0] = (masked ? 0x80 : 0) | 127;
     getBufferFromHexString(pack(16, len)).copy(buf, 1);
   }

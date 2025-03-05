@@ -196,7 +196,7 @@ describe('WebSocketServer', function() {
       var socket = new WebSocket('ws://127.0.0.1:8080/');
 
       socket.onopen = function() {
-          socket._socket.write(new Buffer([5]));
+          socket._socket.write(Buffer.from([5]));
           socket.send('');
       };
     });  
@@ -762,7 +762,7 @@ describe('WebSocketServer', function() {
             }
           };
           var req = http.request(options);
-          req.write(new Buffer([0x81, 0x05, 0x48, 0x65, 0x6c, 0x6c, 0x6f], 'binary'));
+          req.write(Buffer.from([0x81, 0x05, 0x48, 0x65, 0x6c, 0x6c, 0x6f], 'binary'));
           req.end();
         });
         wss.on('connection', function(ws) {
@@ -1277,7 +1277,7 @@ describe('WebSocketServer', function() {
           };
           var req = http.request(options);
           req.write('WjN}|M(6');
-          req.write(new Buffer([0x00, 0x48, 0x65, 0x6c, 0x6c, 0x6f, 0xff], 'binary'));
+          req.write(Buffer.from([0x00, 0x48, 0x65, 0x6c, 0x6c, 0x6f, 0xff], 'binary'));
           req.end();
         });
         wss.on('connection', function(ws) {

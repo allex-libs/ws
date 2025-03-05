@@ -18,7 +18,7 @@ describe('Sender', function() {
   describe('#frameAndSend', function() {
     it('does not modify a masked binary buffer', function() {
       var sender = new Sender({ write: function() {} });
-      var buf = new Buffer([1, 2, 3, 4, 5]);
+      var buf = Buffer.from([1, 2, 3, 4, 5]);
       sender.frameAndSend(2, buf, true, true);
       buf[0].should.eql(1);
       buf[1].should.eql(2);

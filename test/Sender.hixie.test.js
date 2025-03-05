@@ -52,7 +52,7 @@ describe('Sender', function() {
         }
       };
       var sender = new Sender(socket, {});
-      sender.send(new Buffer('foobar'), {}, function() {
+      sender.send(Buffer.from('foobar'), {}, function() {
         received.toString('utf8').should.eql('\u0000foobar\ufffd');
         done();
       });
@@ -86,7 +86,7 @@ describe('Sender', function() {
       sender.on('error', function() {
         done();
       });
-      sender.send(new Buffer(100), {binary: true}, function() {});
+      sender.send(Buffer.alloc(100), {binary: true}, function() {});
     });
 */
     it('can fauxe stream data', function(done) {
@@ -98,9 +98,9 @@ describe('Sender', function() {
         }
       };
       var sender = new Sender(socket, {});
-      sender.send(new Buffer('foobar'), { fin: false }, function() {});
+      sender.send(Buffer.from('foobar'), { fin: false }, function() {});
       sender.send('bazbar', { fin: false }, function() {});
-      sender.send(new Buffer('end'), { fin: true }, function() {
+      sender.send(Buffer.from('end'), { fin: true }, function() {
         received[0].toString('utf8').should.eql('\u0000foobar');
         received[1].toString('utf8').should.eql('bazbar');
         received[2].toString('utf8').should.eql('end\ufffd');
@@ -134,7 +134,7 @@ describe('Sender', function() {
         }
       };
       var sender = new Sender(socket, {});
-      sender.send(new Buffer('foobar'), { fin: false }, function() {});
+      sender.send(Buffer.from('foobar'), { fin: false }, function() {});
       sender.close(null, null, null, function() {
         received[0].toString('utf8').should.eql('\u0000foobar');
         received[1].toString('utf8').should.eql('\ufffd');

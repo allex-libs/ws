@@ -199,7 +199,7 @@ describe('Receiver', function() {
   it('can parse a 100 byte long masked binary message', function() {
     var p = new Receiver();
     var length = 100;
-    var message = new Buffer(length);
+    var message = Buffer.alloc(length);
     for (var i = 0; i < length; ++i) message[i] = i % 256;
     var originalMessage = getHexStringFromBuffer(message);
     var packet = '82 ' + getHybiLengthAsHexString(length, true) + ' 34 83 a8 68 ' + getHexStringFromBuffer(mask(message, '34 83 a8 68'));
@@ -216,7 +216,7 @@ describe('Receiver', function() {
   it('can parse a 256 byte long masked binary message', function() {
     var p = new Receiver();
     var length = 256;
-    var message = new Buffer(length);
+    var message = Buffer.alloc(length);
     for (var i = 0; i < length; ++i) message[i] = i % 256;
     var originalMessage = getHexStringFromBuffer(message);
     var packet = '82 ' + getHybiLengthAsHexString(length, true) + ' 34 83 a8 68 ' + getHexStringFromBuffer(mask(message, '34 83 a8 68'));
@@ -233,7 +233,7 @@ describe('Receiver', function() {
   it('can parse a 200kb long masked binary message', function() {
     var p = new Receiver();
     var length = 200 * 1024;
-    var message = new Buffer(length);
+    var message = Buffer.alloc(length);
     for (var i = 0; i < length; ++i) message[i] = i % 256;
     var originalMessage = getHexStringFromBuffer(message);
     var packet = '82 ' + getHybiLengthAsHexString(length, true) + ' 34 83 a8 68 ' + getHexStringFromBuffer(mask(message, '34 83 a8 68'));
@@ -250,7 +250,7 @@ describe('Receiver', function() {
   it('can parse a 200kb long unmasked binary message', function() {
     var p = new Receiver();
     var length = 200 * 1024;
-    var message = new Buffer(length);
+    var message = Buffer.alloc(length);
     for (var i = 0; i < length; ++i) message[i] = i % 256;
     var originalMessage = getHexStringFromBuffer(message);
     var packet = '82 ' + getHybiLengthAsHexString(length, false) + ' ' + getHexStringFromBuffer(message);
@@ -269,7 +269,7 @@ describe('Receiver', function() {
     perMessageDeflate.accept([{}]);
 
     var p = new Receiver({ 'permessage-deflate': perMessageDeflate });
-    var buf = new Buffer('Hello');
+    var buf = Buffer.from('Hello');
 
     p.ontext = function(data) {
       assert.equal('Hello', data);
@@ -278,7 +278,7 @@ describe('Receiver', function() {
 
     perMessageDeflate.compress(buf, true, function(err, compressed) {
       if (err) return done(err);
-      p.add(new Buffer([0xc1, compressed.length]));
+      p.add(Buffer.from([0xc1, compressed.length]));
       p.add(compressed);
     });
   });
@@ -287,8 +287,8 @@ describe('Receiver', function() {
     perMessageDeflate.accept([{}]);
 
     var p = new Receiver({ 'permessage-deflate': perMessageDeflate });
-    var buf1 = new Buffer('foo');
-    var buf2 = new Buffer('bar');
+    var buf1 = Buffer.from('foo');
+    var buf2 = Buffer.from('bar');
 
     p.ontext = function(data) {
       assert.equal('foobar', data);
@@ -297,11 +297,11 @@ describe('Receiver', function() {
 
     perMessageDeflate.compress(buf1, false, function(err, compressed1) {
       if (err) return done(err);
-      p.add(new Buffer([0x41, compressed1.length]));
+      p.add(Buffer.from([0x41, compressed1.length]));
       p.add(compressed1);
 
       perMessageDeflate.compress(buf2, true, function(err, compressed2) {
-        p.add(new Buffer([0x80, compressed2.length]));
+        p.add(Buffer.from([0x80, compressed2.length]));
         p.add(compressed2);
       });
     });
@@ -309,7 +309,7 @@ describe('Receiver', function() {
     it('will raise an error on a 200kb long masked binary message when maxpayload is 20kb', function() {
     var p = new Receiver(20480);
     var length = 200 * 1024;
-    var message = new Buffer(length);
+    var message = Buffer.alloc(length);
     for (var i = 0; i < length; ++i) message[i] = i % 256;
     var originalMessage = getHexStringFromBuffer(message);
     var packet = '82 ' + getHybiLengthAsHexString(length, true) + ' 34 83 a8 68 ' + getHexStringFromBuffer(mask(message, '34 83 a8 68'));
@@ -326,7 +326,7 @@ describe('Receiver', function() {
   it('will raise an error on a 200kb long unmasked binary message when maxpayload is 20kb', function() {
     var p = new Receiver(20480);
     var length = 200 * 1024;
-    var message = new Buffer(length);
+    var message = Buffer.alloc(length);
     for (var i = 0; i < length; ++i) message[i] = i % 256;
     var originalMessage = getHexStringFromBuffer(message);
     var packet = '82 ' + getHybiLengthAsHexString(length, false) + ' ' + getHexStringFromBuffer(message);
@@ -345,7 +345,7 @@ describe('Receiver', function() {
     perMessageDeflate.accept([{}]);
 
     var p = new Receiver({ 'permessage-deflate': perMessageDeflate },3);
-    var buf = new Buffer('Hellooooooooooooooooooooooooooooooooooooooo');
+    var buf = Buffer.from('Hellooooooooooooooooooooooooooooooooooooooo');
 
     p.onerror = function(reason,code) {
       assert.equal(code, 1009);
@@ -354,7 +354,7 @@ describe('Receiver', function() {
 
     perMessageDeflate.compress(buf, true, function(err, compressed) {
       if (err) return done(err);
-      p.add(new Buffer([0xc1, compressed.length]));
+      p.add(Buffer.from([0xc1, compressed.length]));
       p.add(compressed);
     });
   });
@@ -363,8 +363,8 @@ describe('Receiver', function() {
     perMessageDeflate.accept([{}]);
 
     var p = new Receiver({ 'permessage-deflate': perMessageDeflate },2);
-    var buf1 = new Buffer('fooooooooooooooooooooooooooooooooooooooooooooooooooooooo');
-    var buf2 = new Buffer('baaaarrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr');
+    var buf1 = Buffer.from('fooooooooooooooooooooooooooooooooooooooooooooooooooooooo');
+    var buf2 = Buffer.from('baaaarrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr');
 
     p.onerror = function(reason,code) {
       assert.equal(code, 1009);
@@ -373,11 +373,11 @@ describe('Receiver', function() {
 
     perMessageDeflate.compress(buf1, false, function(err, compressed1) {
       if (err) return done(err);
-      p.add(new Buffer([0x41, compressed1.length]));
+      p.add(Buffer.from([0x41, compressed1.length]));
       p.add(compressed1);
 
       perMessageDeflate.compress(buf2, true, function(err, compressed2) {
-        p.add(new Buffer([0x80, compressed2.length]));
+        p.add(Buffer.from([0x80, compressed2.length]));
         p.add(compressed2);
       });
     });
@@ -387,8 +387,8 @@ describe('Receiver', function() {
     perMessageDeflate.accept([{}]);
 
     var p = new Receiver({ 'permessage-deflate': perMessageDeflate },2);
-    var buf1 = new Buffer('fooooooooooooooooooooooooooooooooooooooooooooooooooooooo');
-    var buf2 = new Buffer('baaaarrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr');
+    var buf1 = Buffer.from('fooooooooooooooooooooooooooooooooooooooooooooooooooooooo');
+    var buf2 = Buffer.from('baaaarrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr');
 
     p.onerror = function(reason,code) {
       assert.equal(code, 1009);
@@ -396,13 +396,13 @@ describe('Receiver', function() {
 
     perMessageDeflate.compress(buf1, false, function(err, compressed1) {
       if (err) return done(err);
-      p.add(new Buffer([0x41, compressed1.length]));
+      p.add(Buffer.from([0x41, compressed1.length]));
       p.add(compressed1);
 
       assert.equal(p.onerror,null);
 
       perMessageDeflate.compress(buf2, true, function(err, compressed2) {
-          p.add(new Buffer([0x80, compressed2.length]));
+          p.add(Buffer.from([0x80, compressed2.length]));
           p.add(compressed2);
           done();
       });
@@ -413,11 +413,11 @@ describe('Receiver', function() {
     perMessageDeflate.accept([{}]);
 
     var p = new Receiver({ 'permessage-deflate': perMessageDeflate });
-    var buf = new Buffer('Hello');
+    var buf = Buffer.from('Hello');
 
     perMessageDeflate.compress(buf, true, function(err, compressed) {
       if (err) return done(err);
-      var data = Buffer.concat([new Buffer([0xc1, compressed.length]), compressed]);
+      var data = Buffer.concat([Buffer.from([0xc1, compressed.length]), compressed]);
       p.add(data);
       p.add(data);
       p.add(data);
